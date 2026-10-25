@@ -109,7 +109,9 @@ final class ShiftClaimController
         // non, d'un autre magasin, déjà attribué au candidat, ou en double.
         $shiftId = (int) ($body['shift_id'] ?? 0);
         $shift   = $shiftId > 0 ? $this->shifts()->findById($shiftId) : null;
-        if ($shift === null || !(int) ($shift['is_open'] ?? 0) || (int) ($shift['store_id'] ?? 0) !== $storeId) {
+        // Un brouillon de planning (contrat 1.32) n'est pas encore ouvert aux candidatures.
+        $draft = $shift !== null && function_exists('shift_is_published') && !shift_is_published($shift);
+        if ($shift === null || $draft || !(int) ($shift['is_open'] ?? 0) || (int) ($shift['store_id'] ?? 0) !== $storeId) {
             throw new ValidationException(['shift_id' => __('shift_claim_error_open_shift_unavailable')]);
         }
         if ((int) ($shift['user_id'] ?? 0) === $userId) {

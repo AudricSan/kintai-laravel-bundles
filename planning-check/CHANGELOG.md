@@ -6,6 +6,12 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-10-25
+
+### Changed
+
+- **Portage vers Kintai sous Laravel** (ligne 3.0, dépôt [kintai-laravel-bundles](https://github.com/AudricSan/kintai-laravel-bundles)) : les vues sont des gabarits Blade (`Views/*.blade.php`), au rendu identique ; le bundle requiert le contrat de bundle `^1.31` (vues Blade dans les bundles, fourni par Kintai sous Laravel) ; ses tests tournent contre `kintai-laravel`.
+
 ### Fixed
 
 - **Fuseau horaire : celui de l'application, plus celui du magasin.** Le jour visé (« demain »), l'ouverture de la fenêtre et l'heure limite étaient évalués dans le fuseau du magasin, qui vaut « UTC » par défaut : le contrôle s'ouvrait et passait « en retard » avec plusieurs heures de décalage, et pouvait viser le mauvais jour. Ils suivent désormais le fuseau de l'instance (`APP_TIMEZONE`), comme la synchronisation de calendrier du Core.

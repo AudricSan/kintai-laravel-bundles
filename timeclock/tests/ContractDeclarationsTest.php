@@ -73,8 +73,8 @@ final class ContractDeclarationsTest extends TestCase
             [$manager->key, $manager->audience, $manager->label, $manager->view, $manager->permission, $manager->storeFeature]);
         $this->assertSame(['timeclock', DashboardWidget::EMPLOYEE, 'timeclock', 'timeclock::widgets.dashboard-employee', null, 'timeclock'],
             [$employee->key, $employee->audience, $employee->label, $employee->view, $employee->permission, $employee->storeFeature]);
-        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-manager.php');
-        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-employee.php');
+        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-manager.blade.php');
+        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-employee.blade.php');
     }
 
     /** Le bundle n'apporte rien d'autre au Core. */

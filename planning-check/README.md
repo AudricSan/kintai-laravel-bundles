@@ -1,6 +1,6 @@
 # Kintai — Validation du planning de demain (`planning-check`)
 
-Bundle pour [Kintai](https://github.com/AudricSan/Kintai), demandé par les patrons : **avant midi, une fenêtre demande au
+Bundle pour [Kintai](https://github.com/AudricSan/kintai-laravel) (dépôt [kintai-laravel-bundles](https://github.com/AudricSan/kintai-laravel-bundles), vues Blade), demandé par les patrons : **avant midi, une fenêtre demande au
 manager si les shifts du lendemain sont corrects**, avec un aperçu des shifts. Le flux reprend celui du rapport journalier.
 
 1. **Soumettre** — le manager répond « Oui, le planning est correct » (le premier manager qui soumet suffit). Sans aucun shift,
@@ -28,8 +28,9 @@ Toutes à portée magasin ; les accorder aux rôles depuis la page Rôles.
 
 ## Développement
 ```bash
-composer install && vendor/bin/phpunit
+# à la racine de kintai-laravel-bundles
+composer install && vendor/bin/phpunit --testsuite planning-check
 ```
-Kintai doit être cloné à côté (`../../Kintai`, voir `composer.json`). Nécessite le contrat de bundle `^1.27`
-(`Bundle::pageOverlays()`). Les fenêtres sont des `PageOverlay` : la validation à faire (priorité 10), le planning à soumettre
+kintai-laravel doit être cloné à côté (`../kintai-laravel`, ou `KINTAI_CORE`, voir `tests/bootstrap.php` à la racine).
+Nécessite le contrat de bundle `^1.31` (vues Blade ; `Bundle::pageOverlays()` depuis 1.27). Les fenêtres sont des `PageOverlay` : la validation à faire (priorité 10), le planning à soumettre
 (20) et la barre de correction (30, non bloquante).

@@ -1,13 +1,13 @@
 {
     "slug": "resignation-report",
     "name": "Rapport de démission",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "description": "Rapports de démission par employé, avec réactivation du compte.",
     "author": {
         "name": "AudricSan",
         "url": "https://github.com/AudricSan"
     },
-    "kintai_contract": "^1.21",
+    "kintai_contract": "^1.31",
     "kintai_core": {
         "min": "0.3.6",
         "max": "999.999.999"
@@ -16,5 +16,5 @@
     "namespace": "kintai\\Bundles\\Installed\\ResignationReport",
     "entry_class": "kintai\\Bundles\\Installed\\ResignationReport\\ResignationReportBundle",
     "license": "AGPL-3.0-only",
-    "homepage": "https://github.com/AudricSan/kintai-bundle-resignation-report"
+    "homepage": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/resignation-report"
 }

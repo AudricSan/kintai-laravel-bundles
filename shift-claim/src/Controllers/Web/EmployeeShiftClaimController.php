@@ -54,6 +54,9 @@ final class EmployeeShiftClaimController
         $openShifts = [];
         foreach ($myStoreIds as $sid) {
             foreach ($this->shifts->findOpen($sid) as $s) {
+                if (!self::isPublished($s)) {
+                    continue;
+                }
                 $openShifts[(int) $s['id']] = $s;
             }
         }
@@ -109,7 +112,7 @@ final class EmployeeShiftClaimController
         $shift = $this->shifts->findById($shiftId);
         // Shift publié requis. Il peut avoir un titulaire : publier un shift attribué, c'est le céder (son titulaire
         // le garde jusqu'à l'approbation d'un candidat). Le titulaire ne peut pas postuler à son propre shift.
-        if ($shift === null || !(int) ($shift['is_open'] ?? 0)) {
+        if ($shift === null || !(int) ($shift['is_open'] ?? 0) || !self::isPublished($shift)) {
             return Response::redirect($this->base() . '/employee/open-shifts?error=not_found');
         }
         if ((int) ($shift['user_id'] ?? 0) === $userId) {
@@ -204,5 +207,14 @@ final class EmployeeShiftClaimController
             $referenceId,
             '/admin/open-shifts?highlight=' . $referenceId
         );
+    }
+
+    /**
+     * Un brouillon de planning (contrat 1.32, publication du planning) n'est pas encore visible des employés : il n'est
+     * pas proposé dans la bourse. Sans la fonction (Core plus ancien), tout shift est publié.
+     */
+    private static function isPublished(array $shift): bool
+    {
+        return !function_exists('shift_is_published') || shift_is_published($shift);
     }
 }

@@ -1,13 +1,13 @@
 {
     "slug": "messaging",
     "name": "Messagerie",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "description": "Messagerie interne entre membres des magasins.",
     "author": {
         "name": "AudricSan",
         "url": "https://github.com/AudricSan"
     },
-    "kintai_contract": "^1.23",
+    "kintai_contract": "^1.31",
     "kintai_core": {
         "min": "0.3.6",
         "max": "999.999.999"
@@ -16,5 +16,5 @@
     "namespace": "kintai\\Bundles\\Installed\\Messaging",
     "entry_class": "kintai\\Bundles\\Installed\\Messaging\\MessagingBundle",
     "license": "AGPL-3.0-only",
-    "homepage": "https://github.com/AudricSan/kintai-bundle-messaging"
+    "homepage": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/messaging"
 }

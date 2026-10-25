@@ -1,0 +1,98 @@
+name: Tests
+
+# Required status check on main/alpha/beta. The bundles' PHPUnit suites run
+# against the real Kintai Core (AudricSan/kintai-laravel), checked out next to
+# this repository: tests/bootstrap.php loads its autoloader (its classes,
+# helpers and Laravel), so controllers, views and migrations are exercised
+# against the actual classes, not reimplemented fakes.
+
+on:
+  push:
+    branches: [main, alpha, beta, develop]
+  pull_request:
+    branches: [main, alpha, beta, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the bundles
+        uses: actions/checkout@v4
+        with:
+          path: kintai-laravel-bundles
+
+      - name: Checkout Kintai Core (sibling repo, for the real kintai\* classes)
+        uses: actions/checkout@v4
+        with:
+          repository: AudricSan/kintai-laravel
+          # develop: the bundle contract these bundles require may not be
+          # promoted through alpha/beta/main yet.
+          ref: develop
+          path: kintai-laravel
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Lint PHP syntax
+        working-directory: kintai-laravel-bundles
+        run: |
+          set -euo pipefail
+          # Views are Blade templates, not plain PHP: tests/Shared/BladeViewsTest.php checks what Blade compiles them to.
+          find . -path ./vendor -prune -o -name '*.php' ! -name '*.blade.php' -print0 | xargs -0 -n1 php -l > /dev/null
+
+      - name: Validate JSON manifests
+        working-directory: kintai-laravel-bundles
+        run: |
+          set -euo pipefail
+          for f in */bundle.json */lang/*.json composer.json registry.json; do
+            jq empty "$f"
+          done
+
+      # Kintai sends `script-src 'self' 'nonce-…'`: an onclick=/onchange=/… attribute, a javascript: link or a
+      # <script> without a nonce is blocked by the browser, silently (nothing fails on the server, so no other test
+      # catches it). See "Content Security Policy" in the bundle guide of Kintai's wiki.
+      - name: No inline event handlers or nonce-less scripts (Kintai CSP)
+        working-directory: kintai-laravel-bundles
+        run: |
+          set -euo pipefail
+          paths=$(ls -d */Views */src 2>/dev/null || true)
+          if [ -z "$paths" ]; then
+            echo "::error::No */Views or */src found in $(pwd)"
+            exit 1
+          fi
+          if grep -rnE "[[:space:]]on(click|change|submit|input|load|error|focus|blur|dblclick|keyup|keydown)[[:space:]]*=|['\"]on(click|change|submit|input)['\"][[:space:]]*=>|(href|src|action)[[:space:]]*=[[:space:]]*[\"']javascript:|<script>" $paths; then
+            echo "::error::Inline handlers, javascript: URLs and <script> without nonce are blocked by Kintai's CSP. Use data-on-click / data-confirm / data-submit-on-change, and <script nonce=\"{!! csp_nonce() !!}\">."
+            exit 1
+          fi
+
+      - name: Install Kintai Core dependencies
+        working-directory: kintai-laravel
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Install dependencies
+        working-directory: kintai-laravel-bundles
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run PHPUnit (every bundle)
+        working-directory: kintai-laravel-bundles
+        run: vendor/bin/phpunit
+
+  registry:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate registry.json
+        run: node scripts/validate-registry.js
+
+      - name: Unit tests (registry sync, commit pinning)
+        run: node --test scripts/*.test.js

@@ -1,0 +1,47 @@
+{
+    "name": "audricsan/kintai-laravel-bundles",
+    "description": "Bundles officiels de Kintai (Laravel) — outillage de tests uniquement, jamais utilisé à l'exécution (Kintai charge chaque bundle dynamiquement, pas via Composer).",
+    "type": "project",
+    "license": "AGPL-3.0-only",
+    "require-dev": {
+        "phpunit/phpunit": "^12.5"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "kintai\\Bundles\\Installed\\DailyReport\\": "daily-report/src/",
+            "kintai\\Tests\\Bundles\\DailyReport\\": "daily-report/tests/",
+            "kintai\\Bundles\\Installed\\HiringReport\\": "hiring-report/src/",
+            "kintai\\Tests\\Bundles\\HiringReport\\": "hiring-report/tests/",
+            "kintai\\Bundles\\Installed\\Messaging\\": "messaging/src/",
+            "kintai\\Tests\\Bundles\\Messaging\\": "messaging/tests/",
+            "kintai\\Bundles\\Installed\\Notebook\\": "notebook/src/",
+            "kintai\\Tests\\Bundles\\Notebook\\": "notebook/tests/",
+            "kintai\\Bundles\\Installed\\PlanningCheck\\": "planning-check/src/",
+            "kintai\\Tests\\Bundles\\PlanningCheck\\": "planning-check/tests/",
+            "kintai\\Bundles\\Installed\\ResignationReport\\": "resignation-report/src/",
+            "kintai\\Tests\\Bundles\\ResignationReport\\": "resignation-report/tests/",
+            "kintai\\Bundles\\Installed\\SalaryReport\\": "salary-report/src/",
+            "kintai\\Tests\\Bundles\\SalaryReport\\": "salary-report/tests/",
+            "kintai\\Bundles\\Installed\\ShiftClaim\\": "shift-claim/src/",
+            "kintai\\Tests\\Bundles\\ShiftClaim\\": "shift-claim/tests/",
+            "kintai\\Bundles\\Installed\\ShiftSwap\\": "shift-swap/src/",
+            "kintai\\Tests\\Bundles\\ShiftSwap\\": "shift-swap/tests/",
+            "kintai\\Bundles\\Installed\\StorePhoto\\": "store-photos/src/",
+            "kintai\\Tests\\Bundles\\StorePhoto\\": "store-photos/tests/",
+            "kintai\\Bundles\\Installed\\TeamDirectory\\": "team-directory/src/",
+            "kintai\\Tests\\Bundles\\TeamDirectory\\": "team-directory/tests/",
+            "kintai\\Bundles\\Installed\\Timeclock\\": "timeclock/src/",
+            "kintai\\Tests\\Bundles\\Timeclock\\": "timeclock/tests/",
+            "kintai\\Bundles\\Installed\\TimeOff\\": "timeoff/src/",
+            "kintai\\Tests\\Bundles\\TimeOff\\": "timeoff/tests/",
+            "kintai\\Tests\\Bundles\\Shared\\": "tests/Shared/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "platform": {
+            "php": "8.3.32"
+        }
+    }
+}

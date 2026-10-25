@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="shared">
+            <directory>tests/Shared</directory>
+        </testsuite>
+        <testsuite name="daily-report">
+            <directory>daily-report/tests</directory>
+        </testsuite>
+        <testsuite name="hiring-report">
+            <directory>hiring-report/tests</directory>
+        </testsuite>
+        <testsuite name="messaging">
+            <directory>messaging/tests</directory>
+        </testsuite>
+        <testsuite name="notebook">
+            <directory>notebook/tests</directory>
+        </testsuite>
+        <testsuite name="planning-check">
+            <directory>planning-check/tests</directory>
+        </testsuite>
+        <testsuite name="resignation-report">
+            <directory>resignation-report/tests</directory>
+        </testsuite>
+        <testsuite name="salary-report">
+            <directory>salary-report/tests</directory>
+        </testsuite>
+        <testsuite name="shift-claim">
+            <directory>shift-claim/tests</directory>
+        </testsuite>
+        <testsuite name="shift-swap">
+            <directory>shift-swap/tests</directory>
+        </testsuite>
+        <testsuite name="store-photos">
+            <directory>store-photos/tests</directory>
+        </testsuite>
+        <testsuite name="team-directory">
+            <directory>team-directory/tests</directory>
+        </testsuite>
+        <testsuite name="timeclock">
+            <directory>timeclock/tests</directory>
+        </testsuite>
+        <testsuite name="timeoff">
+            <directory>timeoff/tests</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>daily-report/src</directory>
+            <directory>hiring-report/src</directory>
+            <directory>messaging/src</directory>
+            <directory>notebook/src</directory>
+            <directory>planning-check/src</directory>
+            <directory>resignation-report/src</directory>
+            <directory>salary-report/src</directory>
+            <directory>shift-claim/src</directory>
+            <directory>shift-swap/src</directory>
+            <directory>store-photos/src</directory>
+            <directory>team-directory/src</directory>
+            <directory>timeclock/src</directory>
+            <directory>timeoff/src</directory>
+        </include>
+    </source>
+</phpunit>

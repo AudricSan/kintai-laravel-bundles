@@ -49,7 +49,7 @@ final class ContractDeclarationsTest extends TestCase
         $this->assertSame('team-directory::profile-section', $sections[0]->view);
         $this->assertSame(['show_in_directory', 'share_email', 'share_phone', 'share_mobile_phone'], $sections[0]->flags);
         $this->assertSame(10, $sections[0]->order);
-        $this->assertFileExists(dirname(__DIR__) . '/Views/profile-section.php');
+        $this->assertFileExists(dirname(__DIR__) . '/Views/profile-section.blade.php');
     }
 
     /** Le bundle n'apporte rien d'autre au Core. */

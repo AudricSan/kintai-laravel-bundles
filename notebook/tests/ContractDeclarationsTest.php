@@ -58,8 +58,8 @@ final class ContractDeclarationsTest extends TestCase
         $this->assertSame('notebook::widgets.dashboard-manager', $byAudience[DashboardWidget::MANAGER]->view);
         $this->assertSame('notebook_my_team_notes', $byAudience[DashboardWidget::EMPLOYEE]->label);
         $this->assertSame('notebook::widgets.dashboard-employee', $byAudience[DashboardWidget::EMPLOYEE]->view);
-        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-manager.php');
-        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-employee.php');
+        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-manager.blade.php');
+        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-employee.blade.php');
     }
 
     public function testNotificationTypes(): void

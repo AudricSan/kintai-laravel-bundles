@@ -1,115 +1,7 @@
-# CLAUDE.md
+# CLAUDE.md — notebook
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## What this repository is
-
-This is the standalone distribution repo for the official "Notebook" bundle of
-[Kintai](https://github.com/AudricSan/Kintai) — a team notebook: members post
-notes visible on both the admin and employee dashboards, with pinning,
-per-note scope (a single store, or the whole organization), and automatic
-expiration. It follows the same distribution model as every other Kintai
-bundle (see `docs/creating-a-bundle.md` in the main Kintai repo — manifest,
-registry, installer), but is the first bundle to ship its own database schema
-via the `database/migrations/` mechanism (see "Architecture" below) rather
-than depending on a table Kintai Core already provides.
-
-Unlike every other Kintai bundle, this repo **does** ship a real PHPUnit
-suite (`tests/`) — see "Running tests" below for how. Nothing here is a
-reimplementation or fake of Kintai Core: `composer.json`'s `autoload-dev`
-maps the `kintai\` namespace root straight to the real Kintai repository's
-`src/` via a relative path (`../../Kintai/src/`), the same sibling-repo
-layout `KintaiBundleDev/` already uses locally — so `Request`/`Response`,
-`PermissionService`, the repository interfaces, `Database\Migration`, and
-everything else this bundle's classes depend on are the actual Core classes,
-just never booted into a running app (no HTTP layer, no real database beyond
-an in-memory SQLite `Capsule` tests set up themselves, no `Application`
-instance). Tests mock only what a running app would inject (repositories,
-`NotificationService`) — never Core's own logic. This still can't replace
-installing the bundle into a real running instance for a final check (routing,
-views, RBAC middleware, and anything actually hitting the configured database
-driver are all out of scope for these tests), but it exercises every
-controller's actual decision logic (authorization branches, scope
-resolution, notification recipients) and the migration file itself, without
-that step.
-
-Kintai never `git clone`/`pull`s bundles (many shared-hosting environments
-have no `git` CLI available to PHP) — `BundleInstallerService` always
-downloads a tagged GitHub Release's zipball. This repo's only "build output"
-is therefore the GitHub Release itself; nothing here gets compiled or
-packaged.
-
-## Running tests
-
-```bash
-composer install
-vendor/bin/phpunit
-```
-
-Requires a checkout of [`AudricSan/Kintai`](https://github.com/AudricSan/Kintai)
-at `../../Kintai` relative to this repo's root — exactly the layout this repo
-already has locally inside `KintaiBundleDev/` (this repo and `Kintai/` as
-siblings). Nothing else to configure: no database, no `.env`, no booted
-`Application`. `tests/` mirrors `src/`'s structure (`Controllers/Web/`,
-`Controllers/Api/`, plus `Database/` for the migration test) and follows the
-same conventions as Kintai's own test suite — mock the repository interfaces
-and `NotificationService`, construct a real `PermissionService` with mocked
-`RoleAssignmentRepositoryInterface`/`RoleRepositoryInterface` rather than
-mocking `PermissionService` itself (it's `final`, and mocking it would test
-nothing about how RBAC actually resolves), use `ReflectionProperty` to set
-`Request`'s private `jsonBody` for API tests and to read `Response`'s private
-`headers['Location']` for redirect assertions — see any existing test file
-for the exact pattern. The migration test instantiates the real
-`kintai\Core\Database\BundleMigrationRunner` against an in-memory SQLite
-`Capsule` (same reflection-based construction technique as Kintai's own
-`BundleMigrationRunnerTest`) rather than asserting anything about the
-migration file's contents directly — it proves the file actually produces
-the right schema through the exact mechanism `BundleInstallerService` uses at
-install time, not just that it's syntactically valid.
-
-## CI and branches
-
-This repo mirrors the branch/release model of the main Kintai repo:
-
-- `main`, `alpha`, and `beta` are protected branches — no direct push; land
-  changes via a PR (see `CONTRIBUTING.md`). New work targets `alpha` (the
-  active channel); promote a line forward by merging `alpha` → `beta` → `main`.
-- `.github/workflows/tests.yml` runs a `test` job on every push and PR to
-  these branches — this is the required status check gating merges. It checks
-  out this repo AND `AudricSan/Kintai` side by side (`Kintai` as a sibling of
-  `KintaiBundleDev/`, matching the relative path in `composer.json`), lints
-  every `.php` file (`php -l`), validates `bundle.json`/`lang/*.json` as JSON,
-  then runs `composer install` and the real `vendor/bin/phpunit` suite — see
-  "Running tests" above. It pins the Kintai checkout to `develop`, not
-  `main` (Kintai's actual GitHub default branch) — this bundle's Core
-  dependencies (`NotebookEntryRepositoryInterface`, `BundleMigrationRunner`)
-  only exist there for now. Update that `ref:` once a Kintai release
-  actually ships them through `alpha`/`beta`/`main`, and set `bundle.json`'s
-  `kintai_core.min` to that version at the same time.
-- Merging into any of the three branches triggers
-  `.github/workflows/release.yml`, which tags and publishes a GitHub Release
-  — see "Release process" below.
-
-## Release process
-
-`.github/workflows/release.yml` triggers on push to `alpha`, `beta`, or
-`main` (i.e. on every merge, since those branches are protected) and computes
-and pushes the tag itself — never tag or `gh release create` by hand:
-
-- Version line `X.Y` comes from `version` in `bundle.json`, which is always
-  written as the placeholder `X.Y.0` and is only bumped by hand when opening a
-  new release line (new `Y`).
-- `alpha`/`beta` merges tag `vX.Y.Z` as a prerelease, where `Z` is the highest
-  existing `vX.Y.*` tag + 1 — a counter shared and cumulative across alpha and
-  beta within the same line, never reset between them.
-- `main` merges tag `vX.Y.0` as the stable release for that line. If `vX.Y.0`
-  already exists, the job skips cleanly (a line only ever gets one stable
-  release; further fixes require opening a new line).
-- Release notes are extracted from `CHANGELOG.md`: `## [Unreleased]` for
-  alpha/beta (falling back to `## [X.Y.0]` if `Unreleased` is empty, i.e. the
-  release commit already renamed it), or `## [X.Y.0]` directly for `main`. A
-  push to a channel with no matching CHANGELOG section fails the job — always
-  update `CHANGELOG.md` in your PR before merging.
+Bundle officiel « Carnet de notes » de Kintai, dans le dépôt des bundles Laravel (`kintai-laravel-bundles`). Dépôt, tests,
+CI, branches et releases : voir le `CLAUDE.md` à la racine du dépôt. Ce fichier ne décrit que ce bundle.
 
 ## Architecture
 
@@ -159,7 +51,7 @@ and pushes the tag itself — never tag or `gh release create` by hand:
   ownership pattern (author OR `notebook.manage`) matching every other
   bundle's API controller — see `ShiftSwapRequestController` in Core if you
   need the reference audit-fix history for this pattern.
-- `Views/notebook.php` — the full list/management page, registered under the
+- `Views/notebook.blade.php` — the full list/management page, registered under the
   `notebook::` view namespace (`notebook::notebook`). Reuses the
   `.notebook-widget-item` CSS classes Kintai Core ships for its own dashboard
   widget cards (`public/assets/css/src/components/notebook.css`), so this
@@ -182,6 +74,6 @@ other check would catch it. Write declarative attributes handled by the Core's `
 `@this`/`@value`/`@checked`), `data-submit-on-change`, `data-submit-form="id"`, `data-goto="url"`,
 `data-stop-propagation`, and `data-confirm="message"` on a form or a submit button (global confirmation modal).
 `data-on-*` only calls a function *you* defined on `window`; browser built-ins are refused on purpose. A needed
-inline script uses `<script nonce="<?= function_exists('csp_nonce') ? csp_nonce() : '' ?>">`. `Button::attrs()`
+inline script uses `<script nonce="{!! function_exists('csp_nonce') ? csp_nonce() : '' !!}">` (views are Blade templates). `Button::attrs()`
 already escapes values: pass raw ones. `tests.yml` fails when a violation reappears. Full reference: [Content
 Security Policy](https://github.com/AudricSan/Kintai/blob/develop/docs/creating-a-bundle.md#content-security-policy-no-inline-scripts) in Kintai's bundle guide.

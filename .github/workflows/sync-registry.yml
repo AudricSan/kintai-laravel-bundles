@@ -1,0 +1,61 @@
+name: Sync registry
+
+# Met registry.json (lu par Kintai sur main) à jour avec les releases des
+# bundles (`{slug}-vX.Y.Z`), par une PR relue : chaque nouvelle version y est
+# épinglée à son commit. Lancé par release.yml après une publication, toutes
+# les heures, ou à la main.
+
+on:
+  schedule:
+    - cron: "0 * * * *" # every hour
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Sync versions from GitHub Releases
+        id: sync
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/sync-registry.js
+
+      - name: Validate registry.json
+        if: steps.sync.outputs.changed == 'true'
+        run: node scripts/validate-registry.js
+
+      - name: Open pull request
+        if: steps.sync.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          commit-message: "chore: sync bundle versions from GitHub Releases"
+          branch: sync-bundle-versions
+          delete-branch: true
+          title: "chore: sync bundle versions from GitHub Releases"
+          body: |
+            Mise à jour automatique de `registry.json` : les `versions` de chaque
+            bundle ont été resynchronisées avec les releases GitHub taguées
+            (`{slug}-vX.Y.Z`) de ce dépôt.
+
+            **Point de contrôle.** Chaque nouvelle version est épinglée à son commit
+            (`commits`) : c'est ce commit exact que Kintai acceptera d'installer. Avant
+            de fusionner, vérifier que les commits ajoutés sont bien ceux attendus pour
+            ces versions. Une empreinte déjà épinglée n'est jamais modifiée par cette
+            automatisation.
+
+            Généré par le workflow `sync-registry`.
+          labels: automated

@@ -1,4 +1,6 @@
-# CLAUDE.md — kintai-bundle-planning-check
+# CLAUDE.md — planning-check
 
-Bundle Kintai `planning-check`. Règles : voir README.md. Tests : `vendor/bin/phpunit` (Kintai doit être cloné à côté, voir composer.json).
-Branches : jamais de commit direct sur `main`/`beta`/`alpha`/`develop` ; une branche par sujet.
+Bundle officiel « Validation du planning de demain » de Kintai, dans le dépôt des bundles Laravel (`kintai-laravel-bundles`). Dépôt, tests,
+CI, branches et releases : voir le `CLAUDE.md` à la racine du dépôt. Ce fichier ne décrit que ce bundle.
+
+Règles du bundle : voir README.md.

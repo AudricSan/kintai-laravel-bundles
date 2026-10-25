@@ -1,13 +1,13 @@
 {
     "slug": "timeoff",
     "name": "Congés",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "description": "Demandes d'absence des employés : soumission, approbation, suivi.",
     "author": {
         "name": "AudricSan",
         "url": "https://github.com/AudricSan"
     },
-    "kintai_contract": "^1.23",
+    "kintai_contract": "^1.31",
     "kintai_core": {
         "min": "0.3.6",
         "max": "999.999.999"
@@ -16,5 +16,5 @@
     "namespace": "kintai\\Bundles\\Installed\\TimeOff",
     "entry_class": "kintai\\Bundles\\Installed\\TimeOff\\TimeOffBundle",
     "license": "AGPL-3.0-only",
-    "homepage": "https://github.com/AudricSan/kintai-bundle-timeoff"
+    "homepage": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/timeoff"
 }
