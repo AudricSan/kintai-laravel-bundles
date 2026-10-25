@@ -8,6 +8,10 @@ Le schéma de version (X.Y.Z, canaux alpha/beta/main, tags `shift-claim-vX.Y.Z`)
 
 ## [Unreleased]
 
+### Added
+
+- **Brouillons de planning écartés** : quand le magasin publie son planning avant de le montrer (contrat 1.32, `shift_is_published()`), un shift ouvert encore en brouillon n'apparaît pas dans la bourse et refuse les candidatures (page employé et API). Avec un Core plus ancien, rien ne change.
+
 ### Changed
 
 - **Portage vers Kintai sous Laravel** (ligne 3.0, dépôt [kintai-laravel-bundles](https://github.com/AudricSan/kintai-laravel-bundles)) : les vues sont des gabarits Blade (`Views/*.blade.php`), au rendu identique ; le bundle requiert le contrat de bundle `^1.31` (vues Blade dans les bundles, fourni par Kintai sous Laravel) ; ses tests tournent contre `kintai-laravel`.
