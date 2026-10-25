@@ -1,6 +1,267 @@
 {
     "schema_version": 2,
     "name": "Registry officiel Kintai",
-    "updated_at": "2026-10-25T00:00:00Z",
-    "bundles": []
+    "updated_at": "2026-10-25T07:21:58Z",
+    "bundles": [
+        {
+            "slug": "daily-report",
+            "name": "Rapports journaliers",
+            "description": "Rapports d'activité quotidienne, workflow brouillon → soumis → validé.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/daily-report",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "hiring-report",
+            "name": "Rapport d'embauche",
+            "description": "Consultation et édition des rapports d'embauche par magasin, générés automatiquement à la création d'un employé tant que le bundle est actif.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/hiring-report",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "messaging",
+            "name": "Messagerie",
+            "description": "Messagerie interne entre membres des magasins.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/messaging",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "notebook",
+            "name": "Carnet de notes",
+            "description": "Carnet de notes d'équipe — messages visibles sur les dashboards admin et employé, épinglage, expiration automatique.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/notebook",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "planning-check",
+            "name": "Validation du planning de demain",
+            "description": "Avant midi, le manager confirme que les shifts du lendemain sont corrects ; validation, PDF au patron, escalade en cas de retard.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/planning-check",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "resignation-report",
+            "name": "Rapport de démission",
+            "description": "Rapports de démission par employé, avec réactivation du compte.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/resignation-report",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "salary-report",
+            "name": "Rapport de salaire",
+            "description": "Rapports de salaire mensuels par magasin ou par employé, pré-remplis depuis les rapports journaliers et les shifts.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/salary-report",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "shift-claim",
+            "name": "Bourse aux shifts",
+            "description": "Publication de shifts ouverts, candidatures des employés, approbation par un manager.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/shift-claim",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "shift-swap",
+            "name": "Échanges de shifts",
+            "description": "Demandes d'échange de shifts entre employés : proposition, acceptation, application par un manager.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/shift-swap",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "store-photos",
+            "name": "Photos de magasin",
+            "description": "Envoi et suivi de photos hebdomadaires de l'espace de vente.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/store-photos",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "team-directory",
+            "name": "Annuaire des collègues",
+            "description": "Profil enrichi (photo, bio, compétences, langues parlées, loisirs) et annuaire des collègues par store.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/team-directory",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "timeclock",
+            "name": "Pointage",
+            "description": "Pointer/dépointer côté employé, historique et gestion admin des entrées de pointage.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/timeclock",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        },
+        {
+            "slug": "timeoff",
+            "name": "Congés",
+            "description": "Demandes d'absence des employés : soumission, approbation, suivi.",
+            "repository_url": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/timeoff",
+            "versions": {
+                "release": [
+                    "3.0.0"
+                ],
+                "beta": [
+                    "3.0.0"
+                ],
+                "alpha": [
+                    "3.0.0"
+                ]
+            },
+            "commits": {
+                "3.0.0": "895283d2f36ce9a857591b578fe8bb57da11555e"
+            }
+        }
+    ]
 }
