@@ -3,7 +3,10 @@ name: Sync registry
 # Met registry.json (lu par Kintai sur main) à jour avec les releases des
 # bundles (`{slug}-vX.Y.Z`), par une PR relue : chaque nouvelle version y est
 # épinglée à son commit. Lancé par release.yml après une publication, toutes
-# les heures, ou à la main.
+# les heures, ou à la main. GitHub n'accepte workflow_dispatch et schedule que
+# pour un workflow enregistré sur la branche par défaut (develop) ; la PR
+# ouverte exige le réglage « Allow GitHub Actions to create and approve pull
+# requests » du dépôt.
 
 on:
   schedule:
