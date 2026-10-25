@@ -8,6 +8,8 @@ Le schéma de version (X.Y.Z, canaux alpha/beta/main, tags `shift-swap-vX.Y.Z`) 
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-10-25
+
 ### Added
 
 - **Brouillons de planning écartés** : quand le magasin publie son planning avant de le montrer (contrat 1.32, `shift_is_published()`), un shift encore en brouillon n'est ni proposé ni accepté dans une demande d'échange. Avec un Core plus ancien, rien ne change.

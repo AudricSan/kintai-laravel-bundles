@@ -8,6 +8,8 @@ Le schéma de version (X.Y.Z, canaux alpha/beta/main, tags `daily-report-vX.Y.Z`
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-10-25
+
 ### Changed
 
 - **Portage vers Kintai sous Laravel** (ligne 3.0, dépôt [kintai-laravel-bundles](https://github.com/AudricSan/kintai-laravel-bundles)) : les vues sont des gabarits Blade (`Views/*.blade.php`), au rendu identique ; le bundle requiert le contrat de bundle `^1.31` (vues Blade dans les bundles, fourni par Kintai sous Laravel) ; ses tests tournent contre `kintai-laravel`.
