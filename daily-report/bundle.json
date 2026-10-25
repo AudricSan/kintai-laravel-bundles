@@ -1,13 +1,13 @@
 {
     "slug": "daily-report",
     "name": "Rapports journaliers",
-    "version": "2.1.1",
+    "version": "3.0.0",
     "description": "Rapports d'activité quotidienne, workflow brouillon → soumis → validé.",
     "author": {
         "name": "AudricSan",
         "url": "https://github.com/AudricSan"
     },
-    "kintai_contract": "^1.29",
+    "kintai_contract": "^1.31",
     "kintai_core": {
         "min": "0.3.6",
         "max": "999.999.999"
@@ -16,5 +16,5 @@
     "namespace": "kintai\\Bundles\\Installed\\DailyReport",
     "entry_class": "kintai\\Bundles\\Installed\\DailyReport\\DailyReportBundle",
     "license": "AGPL-3.0-only",
-    "homepage": "https://github.com/AudricSan/kintai-bundle-daily-report"
+    "homepage": "https://github.com/AudricSan/kintai-laravel-bundles/tree/main/daily-report"
 }

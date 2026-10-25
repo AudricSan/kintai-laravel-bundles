@@ -86,8 +86,8 @@ final class ContractDeclarationsTest extends TestCase
         $this->assertSame(['is_open', 'open_shift_note'], $sections[0]->fields);
         $this->assertSame('shift-claim::shift-form-actions', $sections[0]->actionsView);
         $this->assertSame('open_shifts', $sections[0]->storeFeature);
-        $this->assertFileExists(dirname(__DIR__) . '/Views/shift-form-section.php');
-        $this->assertFileExists(dirname(__DIR__) . '/Views/shift-form-actions.php');
+        $this->assertFileExists(dirname(__DIR__) . '/Views/shift-form-section.blade.php');
+        $this->assertFileExists(dirname(__DIR__) . '/Views/shift-form-actions.blade.php');
     }
 
     public function testEventListeners(): void

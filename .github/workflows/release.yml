@@ -1,0 +1,165 @@
+name: Release
+
+# Publie automatiquement une Release GitHub par bundle à chaque push/merge sur
+# une branche de canal. Ce dépôt regroupe plusieurs bundles (un dossier par
+# bundle) : chacun a ses propres versions, taguées `{slug}-vX.Y.Z`. La ligne de
+# base d'un bundle (X.Y, écrite "X.Y.0" dans {slug}/bundle.json) reste bumpée à
+# la main, uniquement à l'ouverture d'une nouvelle ligne : ce workflow se
+# contente de calculer Z et de tagger.
+#
+# Schéma de version, par bundle : X.Y.Z en cascade.
+# - X = majeur (bump à la main, rare, reset Y et Z à 0).
+# - Y = ligne de release (bump à la main à l'ouverture du premier alpha
+#   d'une ligne, reset Z à 0).
+# - Z = compteur cumulatif, partagé et jamais remis à zéro entre alpha et
+#   beta au sein d'une même ligne X.Y — calculé ici, jamais à la main.
+#   Z = 0 est réservé exclusivement à la release stable sur main.
+#
+# - alpha -> {slug}-vX.Y.Z (prerelease, Z = plus haut tag {slug}-vX.Y.* + 1)
+# - beta  -> {slug}-vX.Y.Z (prerelease, même compteur Z que alpha, cumulatif)
+# - main  -> {slug}-vX.Y.0 (release stable ; ignoré si le tag existe déjà)
+#
+# Sur alpha/beta, un bundle dont le dossier n'a pas changé depuis son dernier
+# tag n'est pas republié : un push qui ne touche qu'un bundle ne publie que lui.
+#
+# Kintai (BundleInstallerService) résout la release `{slug}-v{version}` via
+# l'API GitHub, télécharge son zipball_url — un champ calculé par GitHub à
+# partir du commit taggé — et n'installe que le dossier {slug}/. Ce workflow
+# n'a donc rien à construire : il crée juste la Release elle-même. Le registry
+# (registry.json) est ensuite mis à jour par sync-registry.yml.
+
+on:
+  push:
+    branches: [alpha, beta, main]
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish-releases:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Tag and publish each bundle
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          case "$BRANCH" in
+            alpha) CHANNEL=alpha; PRERELEASE=true ;;
+            beta)  CHANNEL=beta;  PRERELEASE=true ;;
+            main)  CHANNEL=release; PRERELEASE=false ;;
+            *) echo "Branche non gérée : $BRANCH"; exit 1 ;;
+          esac
+
+          extract_section() {
+            awk -v header="$1" '
+              index($0, header) == 1 && !found { found=1; next }
+              found && /^## \[/ { exit }
+              found { print }
+            ' "$2"
+          }
+
+          # Vide au sens strict = aucun caractère non-blanc.
+          is_blank() {
+            ! grep -q '[^[:space:]]' "$1"
+          }
+
+          published=0
+          for manifest in */bundle.json; do
+            SLUG=$(dirname "$manifest")
+            BASE_VERSION=$(php -r 'echo json_decode(file_get_contents($argv[1]), true)["version"];' "$manifest")
+            NAME=$(php -r 'echo json_decode(file_get_contents($argv[1]), true)["name"];' "$manifest")
+            IFS='.' read -r X Y _ <<< "$BASE_VERSION"
+            LINE="${X}.${Y}"
+
+            if [ "$CHANNEL" = "release" ]; then
+              TAG="${SLUG}-v${LINE}.0"
+              if git rev-parse "refs/tags/${TAG}" >/dev/null 2>&1; then
+                echo "${SLUG} : ${TAG} déjà publié, rien à faire."
+                continue
+              fi
+            else
+              LAST=$(git tag -l "${SLUG}-v[0-9]*" --sort=-v:refname | head -n1)
+              if [ -n "$LAST" ] && git diff --quiet "$LAST" HEAD -- "$SLUG"; then
+                echo "${SLUG} : inchangé depuis ${LAST}, rien à publier."
+                continue
+              fi
+
+              # Z = plus haut tag {slug}-vX.Y.* existant + 1, cumulatif entre
+              # alpha et beta au sein de la ligne. Z=0 est réservé à la
+              # release stable : ce compteur démarre toujours à 1.
+              MAX_Z=0
+              for existing in $(git tag -l "${SLUG}-v${LINE}.[0-9]*"); do
+                z="${existing#${SLUG}-v${LINE}.}"
+                case "$z" in
+                  ''|*[!0-9]*) continue ;;
+                esac
+                if [ "$z" -gt "$MAX_Z" ]; then MAX_Z=$z; fi
+              done
+              TAG="${SLUG}-v${LINE}.$((MAX_Z + 1))"
+            fi
+
+            if [ "$CHANNEL" = "release" ]; then
+              extract_section "## [${LINE}.0]" "${SLUG}/CHANGELOG.md" > release-notes.txt
+            else
+              # Le commit de release renomme [Unreleased] en "## [X.Y.0]" et le
+              # laisse vide : les notes vivent alors sous la section versionnée.
+              extract_section "## [Unreleased]" "${SLUG}/CHANGELOG.md" > release-notes.txt
+              if is_blank release-notes.txt; then
+                extract_section "## [${LINE}.0]" "${SLUG}/CHANGELOG.md" > release-notes.txt
+              fi
+            fi
+            if is_blank release-notes.txt; then
+              if [ "$CHANNEL" = "release" ]; then
+                echo "::error::${SLUG} : aucune section '## [${LINE}.0]' dans ${SLUG}/CHANGELOG.md — renommez [Unreleased] en [${LINE}.0] dans le commit de release."
+              else
+                echo "::error::${SLUG} : aucune entrée ${SLUG}/CHANGELOG.md pour '[Unreleased]' ou '[${LINE}.0]' — ajoutez les notes de version avant de publier sur ce canal."
+              fi
+              exit 1
+            fi
+
+            git tag "$TAG"
+            git push origin "$TAG"
+
+            PRERELEASE_FLAG=""
+            if [ "$PRERELEASE" = "true" ]; then
+              PRERELEASE_FLAG="--prerelease"
+            fi
+            gh release create "$TAG" \
+              --title "${NAME} ${TAG#${SLUG}-}" \
+              --notes-file release-notes.txt \
+              --target "$BRANCH" \
+              $PRERELEASE_FLAG
+            echo "${SLUG} : ${TAG} publié."
+            published=$((published + 1))
+          done
+
+          echo "${published} release(s) publiée(s) sur ${CHANNEL}."
+          echo "published=${published}" >> "$GITHUB_OUTPUT"
+        id: publish
+
+      # Une release créée avec le jeton du workflow ne déclenche aucun autre workflow : on lance la mise à jour du
+      # registry explicitement (workflow_dispatch fait exception à cette règle).
+      - name: Update the registry
+        if: steps.publish.outputs.published != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run sync-registry.yml --ref main

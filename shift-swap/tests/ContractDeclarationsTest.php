@@ -99,8 +99,8 @@ final class ContractDeclarationsTest extends TestCase
             [$manager->key, $manager->audience, $manager->label, $manager->view, $manager->permission, $manager->storeFeature]);
         $this->assertSame(['pending_swaps', DashboardWidget::EMPLOYEE, 'shift_swap_pending_swaps', 'shift-swap::widgets.dashboard-employee', null, 'swaps'],
             [$employee->key, $employee->audience, $employee->label, $employee->view, $employee->permission, $employee->storeFeature]);
-        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-manager.php');
-        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-employee.php');
+        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-manager.blade.php');
+        $this->assertFileExists(dirname(__DIR__) . '/Views/widgets/dashboard-employee.blade.php');
     }
 
     public function testDashboardStat(): void

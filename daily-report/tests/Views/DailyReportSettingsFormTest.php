@@ -20,7 +20,7 @@ final class DailyReportSettingsFormTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->view       = (string) file_get_contents(dirname(__DIR__, 2) . '/Views/daily-report-settings.php');
+        $this->view       = (string) file_get_contents(dirname(__DIR__, 2) . '/Views/daily-report-settings.blade.php');
         $this->controller = (string) file_get_contents(dirname(__DIR__, 2) . '/src/Controllers/Web/DailyReportController.php');
     }
 
