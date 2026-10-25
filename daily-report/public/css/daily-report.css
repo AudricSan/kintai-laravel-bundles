@@ -1,0 +1,124 @@
+/* ================================================
+   Daily Report — modale de détail (dr-v2-*) + tableaux KPI/méta
+   S'appuie sur les variables CSS globales exposées par Kintai Core
+   (--space-*, --color-*, --radius-*, --text-*, --duration-*,
+   --overlay-bg). Vivait auparavant éclaté entre le composant partagé
+   modals.css et responsive.css du Core.
+   ================================================ */
+
+.dr-v2-year-totals {
+    font-size: var(--text-sm);
+}
+
+.dr-v2-month {
+    border-top: 1px solid var(--color-border);
+}
+
+.dr-v2-month-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-5);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    transition: background var(--duration-fast);
+}
+
+.dr-v2-month-toggle:hover {
+    background: var(--color-bg-alt);
+}
+
+.dr-v2-month-name {
+    font-weight: 600;
+    min-width: 100px;
+}
+
+.dr-v2-month-stats {
+    flex: 1;
+    font-size: var(--text-xs);
+}
+
+.dr-v2-month-arrow {
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+    margin-left: auto;
+}
+
+.dr-v2-month-body .table-wrap {
+    margin: 0;
+}
+
+.dr-v2-month-body .data-table thead th {
+    background: var(--color-bg);
+}
+
+.dr-v2-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--overlay-bg);
+    z-index: 2000;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.dr-v2-modal {
+    color: var(--color-text);
+    margin: auto;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    width: 100%;
+    max-width: 860px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, .18);
+}
+
+.dr-v2-modal-header {
+    padding: var(--space-3) var(--space-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-border);
+    font-size: var(--text-base);
+}
+
+.dr-v2-modal-body {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.dr-v2-modal-footer {
+    padding: var(--space-3) var(--space-5);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Même point de rupture que le reste du responsive layout Core (responsive.css). */
+@media (max-width: 640px) {
+    .dr-show-grid {
+        grid-template-columns: 1fr !important;
+        gap: var(--space-4) !important;
+    }
+
+    .dr-kpi-table th,
+    .dr-meta-table th {
+        width: 55%;
+        font-weight: 600;
+        font-size: 0.875rem;
+        white-space: nowrap;
+    }
+
+    .dr-kpi-table td,
+    .dr-meta-table td {
+        font-size: 0.9375rem;
+    }
+}

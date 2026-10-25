@@ -1,0 +1,19 @@
+/* ================================================
+   Kintai — PDF Rapport de salaire (mPDF)
+   Charger après pdf-base.css + pdf-brand.css + pdf-preview.css.
+   ================================================ */
+
+body { font-family: sans-serif; font-size: 10pt; color: #222; padding: 20px; }
+h1 { font-size: 16pt; text-align: center; margin-bottom: 4px; }
+.subtitle { text-align: center; font-size: 10pt; color: #666; margin-bottom: 20px; }
+h2 { font-size: 12pt; border-bottom: 2px solid #333; padding-bottom: 4px; margin-top: 20px; margin-bottom: 10px; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+th, td { padding: 5px 8px; text-align: left; border: 1px solid #ccc; }
+th { background: #f0f0f0; font-weight: 600; }
+.tr { text-align: right; }
+.td-mono { font-family: 'Courier New', monospace; }
+.sig-section { margin-top: 40px; }
+.sig-section table { border: none; }
+.sig-section td { border: none; padding: 20px 10px; }
+.sig-line { border-top: 1px solid #222; width: 200px; margin-top: 40px; }
+.footer { text-align: center; font-size: 8pt; color: #999; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 8px; }

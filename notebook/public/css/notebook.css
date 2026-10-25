@@ -1,0 +1,64 @@
+/* ================================================
+   Notebook — Carnet de notes d'équipe
+   Utilisé à la fois par la page complète du bundle (Views/notebook.php)
+   et par le widget dashboard natif du Core (voir Kintai's
+   src/UI/View/dashboard/index.php et employee/dashboard.php), chargé via
+   bundle_asset('notebook', 'css/notebook.css'). S'appuie sur les
+   variables CSS globales exposées par Kintai Core (--space-*,
+   --color-*, --radius-*) — c'est la seule dépendance visuelle attendue
+   envers le Core, pas des classes de composant.
+   ================================================ */
+
+.notebook-widget-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.notebook-widget-item {
+    position: relative;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-alt);
+}
+
+.notebook-widget-item + .notebook-widget-item {
+    margin-top: 0;
+}
+
+/* Note désignée par une notification (?highlight=) : contour et halo la distinguent des autres. */
+.notebook-widget-item--highlight {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 1px;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+.notebook-widget-item--pinned {
+    border-color: var(--color-warning);
+    background: color-mix(in srgb, var(--color-warning) 8%, var(--color-surface));
+}
+
+.notebook-widget-item__pin {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    font-size: 0.9rem;
+}
+
+.notebook-widget-item__content {
+    margin: 0 0 var(--space-2);
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+.notebook-widget-item__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}

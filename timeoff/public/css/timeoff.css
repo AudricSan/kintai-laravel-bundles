@@ -1,0 +1,25 @@
+/* ================================================
+   TimeOff — Formulaire de demande de congé
+   S'appuie sur les variables CSS globales exposées par Kintai Core
+   (--space-*). Vivait auparavant mélangé au fichier Core
+   features/employee.css (page espace employé), avec sa règle
+   responsive dans responsive.css.
+   ================================================ */
+
+.timeoff-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: flex-end;
+}
+.timeoff-form__date  { flex: 0 0 160px; }
+.timeoff-form__short { flex: 0 0 150px; }
+.timeoff-form__grow  { flex: 1; min-width: 180px; }
+
+@media (max-width: 640px) {
+    .timeoff-form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+}

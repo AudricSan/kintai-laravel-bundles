@@ -1,0 +1,39 @@
+/* ================================================
+   Shift Swap — Bourse aux échanges de shifts
+   S'appuie sur les variables CSS globales exposées par Kintai Core
+   (--space-*, --color-*, --text-*). Vivait auparavant mélangé au
+   fichier Core features/employee.css (page espace employé), avec sa
+   règle responsive dans responsive.css.
+   ================================================ */
+
+.swap-card { border-left: 3px solid var(--color-primary); }
+.swap-card .card-header { background: var(--color-primary-light); }
+
+.swap-card__title {
+    margin: 0;
+    font-size: var(--text-base);
+}
+
+.swap-form-row {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+}
+.swap-form-row select { flex: 1; }
+
+.swap-actions {
+    display: flex;
+    gap: var(--space-2);
+}
+
+@media (max-width: 640px) {
+    .swap-form-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-2);
+    }
+
+    .swap-form-row .form-control {
+        width: 100%;
+    }
+}

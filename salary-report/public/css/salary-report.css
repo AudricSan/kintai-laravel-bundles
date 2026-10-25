@@ -1,0 +1,29 @@
+/* ================================================
+   Salary Report — sélecteur de période (mois simple /
+   plage personnalisée) + actions de recalcul et
+   modale de détail des calculs.
+   S'appuie sur les variables CSS globales exposées par Kintai Core
+   (--space-*, --color-*, --text-*).
+   ================================================ */
+
+.sr-period__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.sr-period__status {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.sr-period__status--error {
+    color: var(--color-danger);
+}
+
+.sr-calc-detail__table {
+    width: 100%;
+    margin-bottom: var(--space-4);
+}

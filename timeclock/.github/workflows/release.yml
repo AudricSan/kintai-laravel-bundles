@@ -1,0 +1,170 @@
+name: Release
+
+# Publie automatiquement une Release GitHub à chaque push/merge sur une
+# branche de canal. La ligne de base (X.Y, écrite "X.Y.0" dans bundle.json)
+# reste bumpée à la main, uniquement à l'ouverture d'une nouvelle ligne : ce
+# workflow se contente de calculer Z et de tagger.
+#
+# Schéma de version : X.Y.Z en cascade.
+# - X = majeur (bump à la main, rare, reset Y et Z à 0).
+# - Y = ligne de release (bump à la main à l'ouverture du premier alpha
+#   d'une ligne, reset Z à 0).
+# - Z = compteur cumulatif, partagé et jamais remis à zéro entre alpha et
+#   beta au sein d'une même ligne X.Y — calculé ici, jamais à la main.
+#   Z = 0 est réservé exclusivement à la release stable sur main (comme Z
+#   démarre toujours à 1 côté alpha/beta, X.Y.0 ne collisionne jamais avec
+#   un tag alpha/beta existant de la même ligne).
+#
+# - alpha -> vX.Y.Z (prerelease, Z = plus haut tag vX.Y.* existant + 1)
+# - beta  -> vX.Y.Z (prerelease, même compteur Z que alpha, cumulatif)
+# - main  -> vX.Y.0 (release stable ; ignoré si le tag existe déjà, c'est-à-
+#            dire si la ligne a déjà été publiée en stable)
+#
+# BundleInstallerService (côté Kintai) résout la release via l'API GitHub
+# (releases/tags/v{version}) et télécharge son zipball_url — un champ calculé
+# par GitHub à partir du commit taggé, jamais un artefact uploadé ici. Ce
+# workflow n'a donc rien à construire : il crée juste la Release elle-même,
+# condition pour que ce zipball_url existe.
+
+on:
+  push:
+    branches: [alpha, beta, main]
+
+permissions:
+  contents: write
+
+jobs:
+  publish-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Determine channel and next tag
+        id: version
+        run: |
+          set -euo pipefail
+
+          BASE_VERSION=$(php -r "echo json_decode(file_get_contents('bundle.json'), true)['version'];")
+          BRANCH="${{ github.ref_name }}"
+
+          case "$BRANCH" in
+            alpha) CHANNEL=alpha; PRERELEASE=true ;;
+            beta)  CHANNEL=beta;  PRERELEASE=true ;;
+            main)  CHANNEL=release; PRERELEASE=false ;;
+            *) echo "Branche non gérée : $BRANCH"; exit 1 ;;
+          esac
+
+          # X.Y = ligne de release, lue depuis bundle.json (toujours écrit
+          # "X.Y.0" — le 0 n'est qu'un placeholder).
+          IFS='.' read -r X Y _ <<< "$BASE_VERSION"
+          LINE="${X}.${Y}"
+
+          if [ "$CHANNEL" = "release" ]; then
+            TAG="v${LINE}.0"
+            if git rev-parse "refs/tags/${TAG}" >/dev/null 2>&1; then
+              echo "Tag $TAG déjà publié, rien à faire (ligne déjà passée en stable)."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          else
+            # Z = plus haut tag vX.Y.* existant + 1, cumulatif entre alpha
+            # et beta au sein de la ligne (jamais remis à zéro entre les
+            # deux canaux). Z=0 est réservé à la release stable, donc ce
+            # compteur démarre toujours à 1 pour le premier alpha/beta d'une
+            # ligne.
+            MAX_Z=0
+            for existing in $(git tag -l "v${LINE}.[0-9]*"); do
+              z="${existing#v${LINE}.}"
+              case "$z" in
+                ''|*[!0-9]*) continue ;;
+              esac
+              if [ "$z" -gt "$MAX_Z" ]; then MAX_Z=$z; fi
+            done
+            Z=$((MAX_Z + 1))
+
+            TAG="v${LINE}.${Z}"
+
+            if git rev-parse "refs/tags/${TAG}" >/dev/null 2>&1; then
+              echo "::error::Le tag ${TAG} existe déjà (collision improbable, p.ex. deux publications concurrentes) — relancez le workflow."
+              exit 1
+            fi
+          fi
+
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "channel=$CHANNEL" >> "$GITHUB_OUTPUT"
+          echo "prerelease=$PRERELEASE" >> "$GITHUB_OUTPUT"
+          echo "base_version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Extract release notes from CHANGELOG.md
+        if: steps.version.outputs.skip != 'true'
+        run: |
+          set -euo pipefail
+
+          extract_section() {
+            awk -v header="$1" '
+              index($0, header) == 1 && !found { found=1; next }
+              found && /^## \[/ { exit }
+              found { print }
+            ' CHANGELOG.md
+          }
+
+          # Vide au sens strict = aucun caractère non-blanc (un awk qui ne
+          # trouve que la ligne blanche séparant deux "## [" produit 1 octet
+          # de saut de ligne, que `[ -s ]` considère à tort comme non-vide).
+          is_blank() {
+            ! grep -q '[^[:space:]]' "$1"
+          }
+
+          BASE_VERSION="${{ steps.version.outputs.base_version }}"
+
+          if [ "${{ steps.version.outputs.channel }}" = "release" ]; then
+            extract_section "## [${BASE_VERSION}]" > release-notes.txt
+          else
+            # Sur alpha/beta, la plupart des push accumulent leurs notes sous
+            # [Unreleased] — sauf le commit de release lui-même, qui renomme
+            # [Unreleased] en "## [X.Y.Z]" dans le même commit et laisse donc
+            # [Unreleased] vide : dans ce cas précis, les notes réelles
+            # vivent déjà sous la section versionnée qui vient d'être créée.
+            extract_section "## [Unreleased]" > release-notes.txt
+            if is_blank release-notes.txt; then
+              extract_section "## [${BASE_VERSION}]" > release-notes.txt
+            fi
+          fi
+
+          if is_blank release-notes.txt; then
+            echo "::error::Aucune entrée CHANGELOG.md trouvée pour '[Unreleased]' ou '[${BASE_VERSION}]' — ajoutez les notes de version avant de publier une release sur ce canal."
+            exit 1
+          fi
+
+      - name: Create tag and GitHub release
+        if: steps.version.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          TAG="${{ steps.version.outputs.tag }}"
+
+          git tag "$TAG"
+          git push origin "$TAG"
+
+          PRERELEASE_FLAG=""
+          if [ "${{ steps.version.outputs.prerelease }}" = "true" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+
+          gh release create "$TAG" \
+            --title "Timeclock $TAG" \
+            --notes-file release-notes.txt \
+            --target "${{ github.ref_name }}" \
+            $PRERELEASE_FLAG

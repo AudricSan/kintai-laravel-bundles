@@ -1,0 +1,49 @@
+/* ================================================
+   Timeclock — Pointage employé
+   S'appuie sur les variables CSS globales exposées par Kintai Core
+   (--space-*, --color-*, --radius-*, --text-*).
+   ================================================ */
+
+.timeclock-status {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+}
+
+.timeclock-status--active { color: var(--color-success); }
+.timeclock-status--idle   { color: var(--color-text-muted); }
+
+.timeclock-store {
+    max-width: 20rem;
+    margin: 0 auto var(--space-4);
+}
+
+.timeclock-clock {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+}
+
+#timeclock-elapsed {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+#timeclock-message {
+    margin-top: var(--space-3);
+}
+
+.timeclock-pending {
+    display: none;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-warning-dark);
+    background: var(--color-warning-light);
+    border: 1px solid var(--color-warning-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3);
+    margin: 0 0 var(--space-4);
+}

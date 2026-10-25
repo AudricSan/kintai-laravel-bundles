@@ -1,0 +1,91 @@
+/* ================================================
+   Team Directory — Annuaire des collègues
+   S'appuie sur les variables CSS globales exposées par Kintai Core
+   (--space-*, --color-*, --radius-*, --text-*, --shadow-*).
+   ================================================ */
+
+.team-directory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-4);
+    align-items: stretch;
+}
+
+a.team-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+}
+
+.team-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+}
+
+.team-card__body {
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-2);
+}
+
+.team-card__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+}
+
+.team-card__avatar--fallback {
+    font-size: var(--text-base);
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+}
+
+.team-card__name {
+    font-weight: 600;
+}
+
+.team-card__stores {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+}
+
+/* ── Fiche détail d'un collègue ─────────────────── */
+.team-profile-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.team-profile-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.team-profile-avatar--fallback {
+    font-size: var(--text-xl);
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-full);
+}
+
+.team-profile-name {
+    font-size: var(--text-lg);
+    font-weight: 700;
+}
+
+.team-profile-section {
+    margin-top: var(--space-4);
+}

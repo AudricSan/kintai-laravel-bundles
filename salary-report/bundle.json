@@ -1,0 +1,20 @@
+{
+    "slug": "salary-report",
+    "name": "Rapport de salaire",
+    "version": "2.0.0",
+    "description": "Rapports de salaire mensuels par magasin ou par employé, pré-remplis depuis les rapports journaliers et les shifts.",
+    "author": {
+        "name": "AudricSan",
+        "url": "https://github.com/AudricSan"
+    },
+    "kintai_contract": "^1.14",
+    "kintai_core": {
+        "min": "0.3.6",
+        "max": "999.999.999"
+    },
+    "requires_bundles": {},
+    "namespace": "kintai\\Bundles\\Installed\\SalaryReport",
+    "entry_class": "kintai\\Bundles\\Installed\\SalaryReport\\SalaryReportBundle",
+    "license": "AGPL-3.0-only",
+    "homepage": "https://github.com/AudricSan/kintai-bundle-salary-report"
+}

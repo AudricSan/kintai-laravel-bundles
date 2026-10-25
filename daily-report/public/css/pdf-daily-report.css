@@ -1,0 +1,99 @@
+/* ================================================
+   Kintai — PDF Rapport journalier (mPDF)
+   Charger après pdf-base.css. Unités pt.
+   ================================================ */
+
+/* ── En-tête document ────────────────────────── */
+.header-table   { margin-bottom: 10pt; }
+
+.brand          { font-size: 18pt; font-weight: bold; color: #2c3e50; }
+.brand-store    { font-size: 8.5pt; font-weight: normal; color: #666; display: block; margin-top: 2pt; }
+
+.doc-title      { text-align: right; }
+.doc-title-main { font-size: 14pt; font-weight: bold; color: #2c3e50; }
+.doc-ref        { font-size: 8.5pt; color: #666; display: block; margin-top: 2pt; }
+
+.header-sep { border: none; border-top: 3pt solid #2c3e50; margin-bottom: 10pt; }
+
+/* ── Colonnes génériques ─────────────────────── */
+.vt        { vertical-align: top; }
+.col-left  { width: 50%; vertical-align: top; }
+.col-right { width: 50%; vertical-align: top; }
+
+/* ── Titre de section ────────────────────────── */
+.section-title {
+    background: #2c3e50;
+    color: #fff;
+    font-size: 9pt;
+    font-weight: bold;
+    padding: 4pt 8pt;
+    text-transform: uppercase;
+    letter-spacing: .5pt;
+    margin-top: 12pt;
+}
+.section-title--no-mt { margin-top: 0; }
+
+.notes-section { margin-top: 12pt; }
+
+/* ── Tableau KPI ─────────────────────────────── */
+.kpi-table td       { padding: 6pt 10pt; border-bottom: 1pt solid #e0e0e0; font-size: 10.5pt; }
+.kpi-table td.label { color: #555; width: 55%; }
+.kpi-table td.value { font-weight: bold; text-align: right; color: #1a252f; }
+.kpi-alt td         { background: #f8f9fa; }
+
+/* ── Zone de notes ───────────────────────────── */
+.notes-box {
+    border: 1pt solid #ddd;
+    padding: 7pt 10pt;
+    font-size: 10pt;
+    margin-top: 4pt;
+    min-height: 36pt;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* ── Tableau méta (auteur, dates workflow) ────── */
+.meta-table          { margin-bottom: 10pt; }
+.meta-table td       { padding: 3pt 8pt; font-size: 8.5pt; color: #666; border-bottom: 1pt solid #f0f0f0; }
+.meta-table td.label { font-weight: 600; color: #444; width: 40%; }
+
+/* ── Badge statut ────────────────────────────── */
+.status-badge {
+    display: inline-block;
+    padding: 2pt 8pt;
+    border-radius: 4pt;
+    font-size: 8pt;
+    font-weight: bold;
+    letter-spacing: .5pt;
+}
+.status-draft     { background: #e9ecef; color: #495057; }
+.status-submitted { background: #fff3cd; color: #856404; }
+.status-validated { background: #d1e7dd; color: #0f5132; }
+
+/* ── Tableau shifts du jour ──────────────────── */
+.dr-shifts-table          { font-size: 9pt; margin-bottom: 10pt; }
+.dr-shifts-table th       { background: #2c3e50; color: #fff; padding: 3.5pt 5pt; text-align: left; font-size: 8.5pt; }
+.dr-shifts-table th.tr    { text-align: right; }
+.dr-shifts-table td       { padding: 3pt 5pt; border-bottom: 1pt solid #eee; }
+.dr-shifts-table td.tr    { text-align: right; }
+.dr-shifts-table td.muted { color: #888; font-size: 8.5pt; }
+.dr-shift-alt td          { background: #fafafa; }
+
+.dr-no-shift {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    font-size: 9pt;
+    padding: 8pt;
+}
+
+/* ── Signatures ──────────────────────────────── */
+.sig-table     { margin-top: 20pt; }
+.sig-col-left  { width: 50%; vertical-align: top; padding-right: 20pt; }
+.sig-col-right { width: 50%; vertical-align: top; padding-left:  20pt; }
+.sig-label     { font-size: 8.5pt; color: #555; border-top: 1pt solid #ccc; padding-top: 3pt; }
+.sig-area      { height: 28pt; }
+.sig-name      { font-size: 8.5pt; color: #555; }
+
+/* ── Pied de page ────────────────────────────── */
+.footer { margin-top: 12pt; border-top: 1pt solid #ddd; padding-top: 5pt; font-size: 7pt; color: #bbb; text-align: center; }

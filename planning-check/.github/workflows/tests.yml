@@ -1,0 +1,85 @@
+name: Tests
+
+# Required status check backing branch protection on main/alpha/beta (see
+# CONTRIBUTING.md). Unlike most Kintai bundles, this one ships a real PHPUnit
+# suite (tests/) — its composer.json's autoload-dev maps the kintai\ root
+# straight to the real Kintai Core's src/ (relative path, same sibling-repo
+# layout as the local KintaiBundleDev/ workspace), so controllers/migrations
+# are exercised against the actual classes, not reimplemented fakes. That
+# means CI needs Kintai checked out alongside this repo at the exact same
+# relative path composer.json expects (../../Kintai from this repo's root).
+
+on:
+  push:
+    branches: [main, alpha, beta, develop]
+  pull_request:
+    branches: [main, alpha, beta, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout this bundle
+        uses: actions/checkout@v4
+        with:
+          path: KintaiBundleDev/kintai-bundle-planning-check
+
+      - name: Checkout Kintai Core (sibling repo, for the real kintai\* classes)
+        uses: actions/checkout@v4
+        with:
+          repository: AudricSan/Kintai
+          # develop, not main (Kintai's actual default branch): this bundle's
+          # le contrat de bundle dependencies
+          # only exist on develop for now, not yet promoted through
+          # alpha/beta/main — bump this once a Kintai release ships them and
+          # kintai_core.min in bundle.json can name that version instead.
+          ref: develop
+          path: Kintai
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Lint PHP syntax
+        working-directory: KintaiBundleDev/kintai-bundle-planning-check
+        run: |
+          set -euo pipefail
+          find src Views database tests -name '*.php' -print0 | xargs -0 -n1 php -l
+          php -l routes.php
+
+      - name: Validate JSON manifests
+        working-directory: KintaiBundleDev/kintai-bundle-planning-check
+        run: |
+          set -euo pipefail
+          for f in bundle.json lang/*.json; do
+            jq empty "$f"
+          done
+
+      - name: Install dependencies
+        working-directory: KintaiBundleDev/kintai-bundle-planning-check
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run PHPUnit
+        working-directory: KintaiBundleDev/kintai-bundle-planning-check
+        run: vendor/bin/phpunit
+
+      # Kintai envoie `script-src 'self' 'nonce-…'` : un attribut onclick=/onchange=/…, un lien javascript: ou un
+      # <script> sans nonce est bloqué par le navigateur, en silence (rien ne casse côté serveur, donc aucun autre
+      # test ne l'attrape). Voir « Content Security Policy » dans docs/creating-a-bundle.md du dépôt Kintai.
+      - name: No inline event handlers or nonce-less scripts (Kintai CSP)
+        working-directory: KintaiBundleDev/kintai-bundle-planning-check
+        run: |
+          set -euo pipefail
+          paths=$(ls -d Views src 2>/dev/null || true)
+          # Sans ces dossiers (mauvais répertoire de travail), grep -r parcourrait tout le dépôt : on échoue plutôt que de contrôler autre chose.
+          if [ -z "$paths" ]; then
+            echo "::error::Views/ and src/ not found in $(pwd)"
+            exit 1
+          fi
+          if grep -rnE "[[:space:]]on(click|change|submit|input|load|error|focus|blur|dblclick|keyup|keydown)[[:space:]]*=|['\"]on(click|change|submit|input)['\"][[:space:]]*=>|(href|src|action)[[:space:]]*=[[:space:]]*[\"']javascript:|<script>" $paths; then
+            echo "::error::Inline handlers, javascript: URLs and <script> without nonce are blocked by Kintai's CSP. Use data-on-click / data-confirm / data-submit-on-change, and <script nonce=\"...\">."
+            exit 1
+          fi

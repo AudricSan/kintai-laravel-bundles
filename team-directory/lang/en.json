@@ -1,0 +1,14 @@
+{
+    "bundle_team_directory": "Team directory",
+    "bundle_team_directory_desc": "Extended profile (picture, bio, skills, languages spoken, hobbies) and a per-store colleague directory.",
+    "team_directory_error_not_colleague": "You do not share any store with this user.",
+    "team_directory_share_contact_info": "Share my contact details",
+    "team_directory_share_contact_info_hint": "Choose, field by field, what your colleagues can see on your team directory profile.",
+    "team_directory_show_in_directory": "Visible in my team's directory",
+    "team_directory_show_in_directory_hint": "Colleagues from your stores will be able to see your picture, bio, skills, languages spoken and hobbies.",
+    "team_directory": "Team",
+    "team_directory_back": "Back to directory",
+    "team_directory_empty": "No colleagues to show yet.",
+    "team_directory_empty_profile": "This colleague hasn't filled in their extended profile yet.",
+    "team_directory_view_profile": "View profile"
+}

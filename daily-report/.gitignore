@@ -1,0 +1,54 @@
+# =========================
+# Dépendances & builds
+# =========================
+/vendor
+/node_modules
+
+# =========================
+# Fichiers sensibles / env
+# =========================
+.env
+.env.local
+.env.ovh
+.env.*
+!.env.example
+purge-secrets.txt
+
+# =========================
+# Stockage local
+# =========================
+/storage/*
+!/storage/.gitkeep
+/src/storage/
+
+/storage/uploads/exels
+/storage/uploads/img
+
+# =========================
+# IDE / OS
+# =========================
+/.idea
+/.vscode
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs & temporaires
+# =========================
+purge-history.ps1
+.wiki/
+.phpunit.result.cache
+.cursor/
+.ai/
+.claude/
+.task/
+AGENTS.md
+CLAUDE.md
+/public/storage
+/storage.back
+config/database.local.php
+/mobile
+ROADMAP-FONCTIONNALITES-2026.md

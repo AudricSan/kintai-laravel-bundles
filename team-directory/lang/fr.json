@@ -1,0 +1,14 @@
+{
+    "bundle_team_directory": "Annuaire d'équipe",
+    "bundle_team_directory_desc": "Profil enrichi (photo, bio, compétences, langues parlées, loisirs) et annuaire des collègues par store.",
+    "team_directory_error_not_colleague": "Vous ne partagez aucun store avec cet utilisateur.",
+    "team_directory_share_contact_info": "Partager mes coordonnées",
+    "team_directory_share_contact_info_hint": "Choisissez, information par information, ce que vos collègues peuvent voir sur votre fiche de l'annuaire d'équipe.",
+    "team_directory_show_in_directory": "Visible dans l'annuaire de mon équipe",
+    "team_directory_show_in_directory_hint": "Les collègues de vos stores pourront voir votre photo, votre bio, vos compétences, langues parlées et loisirs.",
+    "team_directory": "Équipe",
+    "team_directory_back": "Retour à l'annuaire",
+    "team_directory_empty": "Aucun collègue à afficher pour le moment.",
+    "team_directory_empty_profile": "Ce collègue n'a pas encore complété son profil enrichi.",
+    "team_directory_view_profile": "Voir le profil"
+}

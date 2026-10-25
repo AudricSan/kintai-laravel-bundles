@@ -1,0 +1,14 @@
+{
+    "bundle_team_directory": "チーム名簿",
+    "bundle_team_directory_desc": "拡張プロフィール（写真、自己紹介、スキル、話せる言語、趣味）と店舗ごとの同僚名簿。",
+    "team_directory_error_not_colleague": "このユーザーとは同じ店舗に所属していません。",
+    "team_directory_share_contact_info": "連絡先を共有する",
+    "team_directory_share_contact_info_hint": "チームディレクトリのプロフィールで同僚に表示する項目を、項目ごとに選択できます。",
+    "team_directory_show_in_directory": "チームの名簿に表示する",
+    "team_directory_show_in_directory_hint": "自分の店舗の同僚が、あなたの写真・自己紹介・スキル・話せる言語・趣味を閲覧できるようになります。",
+    "team_directory": "チーム",
+    "team_directory_back": "名簿に戻る",
+    "team_directory_empty": "表示できる同僚がまだいません。",
+    "team_directory_empty_profile": "この同僚はまだ拡張プロフィールを入力していません。",
+    "team_directory_view_profile": "プロフィールを見る"
+}

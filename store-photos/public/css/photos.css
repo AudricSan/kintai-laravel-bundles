@@ -1,0 +1,277 @@
+/* ================================================
+   Store Photos — Envois de photos (liste, détail, carrousel)
+   S'appuie sur les variables CSS globales exposées par Kintai Core
+   (--space-*, --color-*, --radius-*, --shadow-*, --text-*). Les règles
+   génériques .progress-bar*/.card (utilisées aussi par le Core lui-même,
+   ex. bundle-market/update) restent des composants Core partagés — voir
+   components/progress-bar.css et components/cards.css côté Kintai.
+   ================================================ */
+
+/* ── Liste des envois ───────────────────────────── */
+.photo-day-group__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.photo-day-group__header:not(:first-child) {
+    margin-top: var(--space-5);
+}
+
+.photo-day-group__title {
+    margin: 0;
+    font-size: var(--text-base);
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.photo-grid > .card {
+    margin-bottom: 0;
+}
+
+a.photo-card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.photo-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+}
+
+.photo-card__preview-img {
+    width: 100%;
+    height: 160px;
+    object-fit: scale-down;
+    background: var(--color-bg-alt, #e9ecef);
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.photo-card__preview-empty {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-card__body {
+    padding: var(--space-3);
+}
+
+.photo-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-1);
+}
+
+.photo-card__notes,
+.photo-card__date {
+    margin-top: var(--space-1);
+}
+
+/* ── Détail d'un envoi ───────────────────────────── */
+/* auto-fill/minmax plutôt qu'un nombre de colonnes fixe : la grille était
+   figée à 5 colonnes quelle que soit la largeur d'écran, ce qui écrasait
+   les photos en bandes illisibles sur mobile. */
+.photo-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-2);
+}
+
+.card.photo-detail-card {
+    margin-bottom: 0;
+}
+
+.photo-detail-card:hover {
+    box-shadow: var(--shadow-md);
+    transition: box-shadow 0.2s ease;
+}
+
+.photo-detail-card__trigger {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.photo-detail-card__img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: scale-down;
+    background: var(--color-bg-alt, #e9ecef);
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.photo-detail-card__body {
+    padding: var(--space-2) var(--space-3);
+}
+
+.photo-detail-card__rotate {
+    display: flex;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+}
+
+.photo-detail-card__rotate .btn {
+    line-height: 1;
+}
+
+/* ── Carousel photo (visionneuse plein écran) ──────────────────── */
+.photo-carousel {
+    background: rgba(0, 0, 0, .9);
+    flex-direction: column;
+}
+
+.photo-carousel__stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90vw;
+    max-height: 85vh;
+}
+
+.photo-carousel__img {
+    max-width: 90vw;
+    max-height: 78vh;
+    object-fit: contain;
+    border-radius: var(--radius);
+}
+
+.photo-carousel__caption {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: #fff;
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    text-align: center;
+}
+
+.photo-carousel__counter {
+    color: rgba(255, 255, 255, .6);
+}
+
+.photo-carousel__close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: var(--space-2);
+}
+
+.photo-carousel__close:hover {
+    color: rgba(255, 255, 255, .7);
+}
+
+.photo-carousel__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, .1);
+    border: none;
+    color: #fff;
+    font-size: 2.5rem;
+    line-height: 1;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-carousel__nav:hover {
+    background: rgba(255, 255, 255, .2);
+}
+
+.photo-carousel__nav--prev {
+    left: var(--space-4);
+}
+
+.photo-carousel__nav--next {
+    right: var(--space-4);
+}
+
+@media (max-width: 640px) {
+    .photo-carousel__nav {
+        width: 2.25rem;
+        height: 2.25rem;
+        font-size: 1.75rem;
+    }
+}
+
+.photo-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+}
+
+.photo-preview-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    max-width: 90px;
+    position: relative;
+}
+
+.photo-preview-remove {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-danger);
+    color: #fff;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.photo-upload-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+}
+
+.photo-upload-row .text-sm {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .photo-upload-row {
+        flex-wrap: wrap;
+    }
+}

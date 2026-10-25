@@ -1,0 +1,35 @@
+/* Validation du planning de demain : fenêtres, barre de correction, historique. */
+.pc-overlay { padding: var(--space-5); }
+.pc-overlay__title { margin: 0 0 var(--space-1); font-size: var(--text-lg); }
+.pc-overlay__body { margin: var(--space-3) 0; max-height: 40vh; overflow-y: auto; }
+.pc-overlay__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.pc-overlay__actions form { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.pc-reject { flex: 1; min-width: 14rem; }
+.pc-reject .form-control { flex: 1; }
+.pc-late { color: var(--color-danger); }
+.pc-empty { margin: 0; }
+.pc-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-5); }
+.pc-bar__text { font-size: var(--text-sm); font-weight: 600; }
+
+/* Page de réglages : même grille à deux colonnes que les réglages Owner. */
+.pc-settings { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); align-items: stretch; }
+.pc-settings > .card { margin-bottom: 0; min-width: 0; }
+.pc-settings__wide { grid-column: 1 / -1; }
+.pc-switch-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.pc-switch-row__text { min-width: 0; }
+.pc-switch-row__title { margin: 0; font-weight: 600; }
+.pc-switch-row .form-toggle { flex-shrink: 0; }
+.pc-test { margin-top: var(--space-4); }
+/* Jours de la semaine : pastilles à cocher. */
+.pc-weekdays { border: 0; padding: 0; margin: 0; min-width: 0; }
+.pc-weekdays__list { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.pc-day { position: relative; cursor: pointer; }
+.pc-day__input { position: absolute; opacity: 0; width: 0; height: 0; }
+.pc-day__label { display: inline-block; min-width: 3rem; padding: var(--space-1) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-full); background: var(--color-surface); color: var(--color-text-muted); font-size: var(--text-sm); text-align: center; transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast); }
+.pc-day:hover .pc-day__label { background: var(--color-bg-hover); }
+.pc-day__input:checked + .pc-day__label { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.pc-day__input:focus-visible + .pc-day__label { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+@media (max-width: 760px) {
+    .pc-settings { grid-template-columns: minmax(0, 1fr); }
+    .pc-switch-row { align-items: flex-start; }
+}
