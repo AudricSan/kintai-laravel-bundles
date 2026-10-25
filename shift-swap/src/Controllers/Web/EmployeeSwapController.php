@@ -74,7 +74,7 @@ final class EmployeeSwapController
 
         $myShifts = array_values(array_filter(
             $this->shifts->findByUser($userId),
-            fn($s) => ($s['shift_date'] ?? '') >= $today
+            fn($s) => ($s['shift_date'] ?? '') >= $today && self::isPublished($s)
         ));
         usort($myShifts, fn($a, $b) => strcmp($a['shift_date'] ?? '', $b['shift_date'] ?? ''));
 
@@ -100,7 +100,7 @@ final class EmployeeSwapController
         if ($targetId > 0 && isset($colleagues[$targetId])) {
             $targetShifts = array_values(array_filter(
                 $this->shifts->findByUser($targetId),
-                fn($s) => ($s['shift_date'] ?? '') >= $today
+                fn($s) => ($s['shift_date'] ?? '') >= $today && self::isPublished($s)
             ));
             usort($targetShifts, fn($a, $b) => strcmp($a['shift_date'] ?? '', $b['shift_date'] ?? ''));
         }
@@ -134,12 +134,12 @@ final class EmployeeSwapController
         $reason        = $request->post('reason', '') ?: null;
 
         $myShift = $this->shifts->findById($myShiftId);
-        if ($myShift === null || (int) $myShift['user_id'] !== $userId) {
+        if ($myShift === null || (int) $myShift['user_id'] !== $userId || !self::isPublished($myShift)) {
             throw new ForbiddenException(__('error_shift_not_found'));
         }
 
         $targetShift = $this->shifts->findById($targetShiftId);
-        if ($targetShift === null || (int) $targetShift['user_id'] !== $targetId) {
+        if ($targetShift === null || (int) $targetShift['user_id'] !== $targetId || !self::isPublished($targetShift)) {
             throw new ForbiddenException(__('shift_swap_error_target_shift_not_found'));
         }
 
@@ -304,5 +304,14 @@ final class EmployeeSwapController
             $map[(int) $s['id']] = $s;
         }
         return $map;
+    }
+
+    /**
+     * Un brouillon de planning (contrat 1.32, publication du planning) n'est pas encore visible des employés : il ne
+     * peut ni être proposé ni être demandé en échange. Sans la fonction (Core plus ancien), tout shift est publié.
+     */
+    private static function isPublished(array $shift): bool
+    {
+        return !function_exists('shift_is_published') || shift_is_published($shift);
     }
 }
